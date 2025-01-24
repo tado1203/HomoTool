@@ -1,0 +1,5 @@
+global using GameLoadBalancingClient = ObjectPublicIPhotonPeerListenerObStNuStOb1CoObBoDiUnique;
+global using GamePlayer = MonoBehaviourPublicAPOb_vOb_l_pBoOb_UBoUnique;
+global using GameVRCPlayer = MonoBehaviour1PublicOb_pOb_s_pBoGaOb_pStUnique;
+global using GameNetworkManager = MonoBehaviourPrivateAc1AcOb2AcInStHa2Unique;
+global using GameUdonSync = MonoBehaviour1PrivateBoUdOb1DiObBo2InObUnique;

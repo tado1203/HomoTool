@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35617.110 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomoTool", "HomoTool\HomoTool.csproj", "{F9576CA0-0E46-4B3A-BC1F-FDA217330A0B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F9576CA0-0E46-4B3A-BC1F-FDA217330A0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9576CA0-0E46-4B3A-BC1F-FDA217330A0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9576CA0-0E46-4B3A-BC1F-FDA217330A0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9576CA0-0E46-4B3A-BC1F-FDA217330A0B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EB91C584-5F7F-4EFB-B410-52EDF2E157AA}
+	EndGlobalSection
+EndGlobal
