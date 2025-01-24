@@ -3,7 +3,9 @@ using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using HomoTool.Managers;
+using HomoTool.Module;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -19,27 +21,48 @@ namespace HomoTool
         {
             Log = base.Log;
 
+            AddCoreComponents();
+            RegisterModules();
+            PatchMethods();
+        }
+
+        private void AddCoreComponents()
+        {
             AddComponent<MainMonoBehaviour>();
-
             CoroutineManager.Instance = AddComponent<CoroutineManager>();
+        }
 
-            ModuleManager.Instance.AddModule(new Module.Modules.Flight());
-            ModuleManager.Instance.AddModule(new Module.Modules.Watermark());
-            ModuleManager.Instance.AddModule(new Module.Modules.Speed());
-            ModuleManager.Instance.AddModule(new Module.Modules.ArrayList());
-            ModuleManager.Instance.AddModule(new Module.Modules.ESP());
-            ModuleManager.Instance.AddModule(new Module.Modules.Menu());
-            ModuleManager.Instance.AddModule(new Module.Modules.HUD());
-            ModuleManager.Instance.AddModule(new Module.Modules.PickupDropper());
-            ModuleManager.Instance.AddModule(new Module.Modules.AirJump());
-            ModuleManager.Instance.AddModule(new Module.Modules.Notification());
+        private void RegisterModules()
+        {
+            var modules = new List<ModuleBase>
+            {
+                new Module.Modules.Flight(),
+                new Module.Modules.Watermark(),
+                new Module.Modules.Speed(),
+                new Module.Modules.ArrayList(),
+                new Module.Modules.ESP(),
+                new Module.Modules.Menu(),
+                new Module.Modules.HUD(),
+                new Module.Modules.PickupDropper(),
+                new Module.Modules.AirJump(),
+                new Module.Modules.Notification(),
+            };
 
-            Harmony harmony = new Harmony("HomoTool");
+            foreach (var module in modules)
+            {
+                ModuleManager.Instance.AddModule(module);
+            }
+        }
+
+        private void PatchMethods()
+        {
+            var harmony = new Harmony("HomoTool");
 
             harmony.PatchAll(typeof(Patches.VRC_Pickup.Awake));
             harmony.PatchAll(typeof(Patches.LoadBalancingClient.OpRaiseEvent));
             harmony.PatchAll(typeof(Patches.OnPlayerJoined));
             harmony.PatchAll(typeof(Patches.OnPlayerLeft));
+            harmony.PatchAll(typeof(Patches.UdonSync.UdonSyncRunProgramAsRPC));
         }
     }
 
@@ -50,16 +73,13 @@ namespace HomoTool
         private void Update()
         {
             ModuleManager.Instance.OnUpdate();
-
             NotificationManager.Instance.OnUpdate();
         }
 
         private void OnGUI()
         {
             ModuleManager.Instance.OnGUI();
-
             Console.Instance.OnGUI();
-
             NotificationManager.Instance.OnGUI();
         }
     }

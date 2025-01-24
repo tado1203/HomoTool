@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HarmonyLib;
 using HomoTool.Managers;
+using VRC.SDKBase;
 
 namespace HomoTool.Patches
 {

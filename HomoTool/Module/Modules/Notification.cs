@@ -29,7 +29,7 @@ namespace HomoTool.Module.Modules
             string playerName = playerApi.isLocal ? "You" : playerApi.displayName;
             string text = joined ? $"{playerName} joined the instance." : $"{playerName} left the instance.";
 
-            Console.Instance.Log(text, Color.white);
+            Console.Instance.Log(text);
 
             NotificationManager.Instance.AddNotification(text);
         }
