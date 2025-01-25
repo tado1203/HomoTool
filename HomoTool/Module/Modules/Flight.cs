@@ -10,7 +10,8 @@ namespace HomoTool.Module.Modules
 {
     public class Flight : ModuleBase
     {
-        private float speed = 5.0f;
+        private float speed = 8.0f;
+        private Vector3 oldGravity = Vector3.zero;
 
         public Flight() : base("Flight", false, true, KeyCode.F) { }
 
@@ -53,14 +54,17 @@ namespace HomoTool.Module.Modules
         {
             VRCPlayerApi localPlayer = Networking.LocalPlayer;
             if (localPlayer != null)
-                localPlayer.gameObject.GetComponent<CharacterController>().enabled = false;
+            {
+                oldGravity = Physics.gravity;
+                Physics.gravity = Vector3.zero;
+            }
         }
 
         public override void OnDisable()
         {
             VRCPlayerApi localPlayer = Networking.LocalPlayer;
             if (localPlayer != null)
-                localPlayer.gameObject.GetComponent<CharacterController>().enabled = true;
+                Physics.gravity = oldGravity;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace HomoTool.Patches.LoadBalancingClient
     {
         static bool Prefix(byte param_1, Object param_2, ObjectPublicObByObInByObObUnique param_3, SendOptions param_4)
         {
-            // movement event
+            // disable sending movement event when flight or speed is enabled
             if (param_1 == 12)
                 if (ModuleManager.Instance.GetModule("Flight").Enabled || ModuleManager.Instance.GetModule("Speed").Enabled)
                     return false;

@@ -44,6 +44,7 @@ namespace HomoTool
                 new Module.Modules.PickupDropper(),
                 new Module.Modules.AirJump(),
                 new Module.Modules.Notification(),
+                new Module.Modules.PlayerList(),
             };
 
             foreach (var module in modules)
