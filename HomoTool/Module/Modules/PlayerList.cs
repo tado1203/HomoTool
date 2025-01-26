@@ -11,7 +11,7 @@ namespace HomoTool.Module.Modules
 {
     public class PlayerList : ModuleBase
     {
-        private Vector2 listSize = new Vector2(400, 300);
+        private Vector2 listSize = new Vector2(400, 600);
 
         public PlayerList() : base("PlayerList", true, false) { }
 

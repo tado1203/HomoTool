@@ -1,10 +1,12 @@
 ﻿using HarmonyLib;
+using HomoTool.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VRC.SDKBase;
 
 namespace HomoTool.Patches.UdonSync
 {
@@ -13,7 +15,7 @@ namespace HomoTool.Patches.UdonSync
     {
         static void Prefix(string param_1, GamePlayer param_2)
         {
-            Console.Instance.Log($"UdonSyncRunProgramAsRPC({param_1}, {param_2.prop_VRCPlayerApi_0.displayName}) called.", LogLevel.Debug);
+            // Console.Instance.Log($"UdonSyncRunProgramAsRPC({param_1}, {param_2.prop_VRCPlayerApi_0.displayName}) was called.", LogLevel.Debug);
         }
     }
 }

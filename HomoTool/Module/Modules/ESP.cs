@@ -14,8 +14,10 @@ namespace HomoTool.Module.Modules
 {
 	public class ESP : ModuleBase
 	{
-		private bool renderNavMeshAgent = true;
 		private List<GameObject> navMeshAgentGameObjects = new List<GameObject>();
+		private List<GameObject> pickups = new List<GameObject>();
+
+		private bool renderNavMeshAgent = true;
 		private float maxRenderDistance = 200f;
 
 		public ESP() : base("ESP", false, true, KeyCode.F1) { }
@@ -23,9 +25,27 @@ namespace HomoTool.Module.Modules
 		public override void OnGUI()
 		{
 			if (Networking.LocalPlayer == null || !Enabled)
-				return;
+				return;			
 
 			Vector3 localPlayerPosition = Networking.LocalPlayer.gameObject.transform.position;
+
+			foreach (var gameObject in pickups)
+			{
+				float distance = Vector3.Distance(localPlayerPosition, gameObject.transform.position);
+				if (distance > maxRenderDistance)
+					continue;
+
+				Vector3 originPos = gameObject.transform.position;
+				Vector3 upperPos = new Vector3(originPos.x, originPos.y + 1f, originPos.z);
+
+				Vector3 screenFootPos = Camera.main.WorldToScreenPoint(originPos);
+				Vector3 screenHeadPos = Camera.main.WorldToScreenPoint(upperPos);
+
+				if (screenFootPos.z > 0f)
+					RenderBoxESP(screenFootPos, screenHeadPos, Color.blue);
+				else
+					RenderOffscreenIndicator(gameObject.transform.position, Color.blue);
+			}
 
 			foreach (var player in VRCPlayerApi.AllPlayers)
 			{
@@ -98,18 +118,25 @@ namespace HomoTool.Module.Modules
 				return;
 
 			navMeshAgentGameObjects.Clear();
+			pickups.Clear();
+
 			foreach (var monster in Resources.FindObjectsOfTypeAll<NavMeshAgent>())
 			{
 				navMeshAgentGameObjects.Add(monster.gameObject);
+			}
+			foreach (var pickup in GameObject.FindObjectsOfType<VRC_Pickup>())
+			{
+				pickups.Add(pickup.gameObject);
 			}
 		}
 
 		public override void OnDisable()
 		{
-			if (Networking.LocalPlayer == null || !renderNavMeshAgent)
+			if (Networking.LocalPlayer == null)
 				return;
 
 			navMeshAgentGameObjects.Clear();
+			pickups.Clear();
 		}
 
 		private void RenderBoxESP(Vector3 footPos, Vector3 headPos, Color color)

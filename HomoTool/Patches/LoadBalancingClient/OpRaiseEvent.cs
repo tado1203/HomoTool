@@ -16,7 +16,7 @@ namespace HomoTool.Patches.LoadBalancingClient
         {
             // disable sending movement event when flight or speed is enabled
             if (param_1 == 12)
-                if (ModuleManager.Instance.GetModule("Flight").Enabled || ModuleManager.Instance.GetModule("Speed").Enabled)
+                if (ModuleManager.Instance.GetModule("NoMovementPacket").Enabled)
                     return false;
 
             return true;

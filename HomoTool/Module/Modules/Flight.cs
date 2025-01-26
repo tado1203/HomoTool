@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HomoTool.Managers;
 using UnityEngine;
 using VRC.SDKBase;
 
@@ -11,7 +12,6 @@ namespace HomoTool.Module.Modules
     public class Flight : ModuleBase
     {
         private float speed = 8.0f;
-        private Vector3 oldGravity = Vector3.zero;
 
         public Flight() : base("Flight", false, true, KeyCode.F) { }
 
@@ -52,19 +52,18 @@ namespace HomoTool.Module.Modules
 
         public override void OnEnable()
         {
+            ModuleManager.Instance.GetModule("NoMovementPacket").Enable();
             VRCPlayerApi localPlayer = Networking.LocalPlayer;
             if (localPlayer != null)
-            {
-                oldGravity = Physics.gravity;
-                Physics.gravity = Vector3.zero;
-            }
+                localPlayer.gameObject.GetComponent<CharacterController>().enabled = false;
         }
 
         public override void OnDisable()
         {
+            ModuleManager.Instance.GetModule("NoMovementPacket").Disable();
             VRCPlayerApi localPlayer = Networking.LocalPlayer;
             if (localPlayer != null)
-                Physics.gravity = oldGravity;
+                localPlayer.gameObject.GetComponent<CharacterController>().enabled = true;
         }
     }
 }

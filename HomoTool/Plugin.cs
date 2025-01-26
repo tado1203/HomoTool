@@ -7,6 +7,7 @@ using HomoTool.Module;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using HomoTool.Module.Modules;
 
 namespace HomoTool
 {
@@ -34,17 +35,19 @@ namespace HomoTool
         {
             var modules = new List<ModuleBase>
             {
-                new Module.Modules.Flight(),
-                new Module.Modules.Watermark(),
-                new Module.Modules.Speed(),
-                new Module.Modules.ArrayList(),
-                new Module.Modules.ESP(),
-                new Module.Modules.Menu(),
-                new Module.Modules.HUD(),
-                new Module.Modules.PickupDropper(),
-                new Module.Modules.AirJump(),
-                new Module.Modules.Notification(),
-                new Module.Modules.PlayerList(),
+                new Flight(),
+                new Watermark(),
+                new Speed(),
+                new ArrayList(),
+                new ESP(),
+                new Menu(),
+                new HUD(),
+                new PickupDropper(),
+                new AirJump(),
+                new Notification(),
+                new PlayerList(),
+                new NoMovementPacket(),
+                new ToNFucker(),
             };
 
             foreach (var module in modules)
@@ -62,6 +65,7 @@ namespace HomoTool
             harmony.PatchAll(typeof(Patches.OnPlayerJoined));
             harmony.PatchAll(typeof(Patches.OnPlayerLeft));
             harmony.PatchAll(typeof(Patches.UdonSync.UdonSyncRunProgramAsRPC));
+            harmony.PatchAll(typeof(Patches.UdonBehaviour.RunProgram));
         }
     }
 

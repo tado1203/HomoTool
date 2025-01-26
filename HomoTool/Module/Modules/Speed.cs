@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HomoTool.Managers;
 using UnityEngine;
 using VRC.SDKBase;
 
@@ -60,6 +61,16 @@ namespace HomoTool.Module.Modules
             speed = GUILayout.HorizontalSlider(speed, 4f, 20f);
             GUILayout.Label($"Jump Height: {jumpHeight}");
             jumpHeight = GUILayout.HorizontalSlider(jumpHeight, 3f, 10f);
+        }
+
+        public override void OnEnable()
+        {
+            ModuleManager.Instance.GetModule("NoMovementPacket").Enable();
+        }
+
+        public override void OnDisable()
+        {
+            ModuleManager.Instance.GetModule("NoMovementPacket").Disable();
         }
     }
 }

@@ -35,23 +35,34 @@ namespace HomoTool.Module
 
         public void Toggle()
         {
-            Enabled = !Enabled;
             if (Enabled)
-            {
-                OnEnable();
-
-                string message = $"Enabled {ModuleName}";
-                Plugin.Log.LogMessage(message);
-                NotificationManager.Instance.AddNotification(message);
-            }
+                Disable();
             else
-            {
-                OnDisable();
+                Enable();
+        }
 
-                string message = $"Disabled {ModuleName}";
-                Plugin.Log.LogMessage(message);
-                NotificationManager.Instance.AddNotification(message);
-            }
+        public void Enable()
+        {
+            if (Enabled)
+                return;
+
+            Enabled = true;
+            OnEnable();
+
+            string message = $"Enabled {ModuleName}";
+            NotificationManager.Instance.AddNotification(message);
+        }
+
+        public void Disable()
+        {
+            if (!Enabled)
+                return;
+
+            Enabled = false;
+            OnDisable();
+
+            string message = $"Disabled {ModuleName}";
+            NotificationManager.Instance.AddNotification(message);
         }
     }
 }
