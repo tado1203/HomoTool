@@ -13,9 +13,16 @@ namespace HomoTool.Patches.UdonSync
     [HarmonyPatch(typeof(GameUdonSync), nameof(GameUdonSync.UdonSyncRunProgramAsRPC))]
     class UdonSyncRunProgramAsRPC
     {
-        static void Prefix(string param_1, GamePlayer param_2)
+        static bool Prefix(string param_1, GamePlayer param_2)
         {
-            // Console.Instance.Log($"UdonSyncRunProgramAsRPC({param_1}, {param_2.prop_VRCPlayerApi_0.displayName}) was called.", LogLevel.Debug);
+            if (param_2.prop_VRCPlayerApi_0.displayName == Networking.LocalPlayer.displayName && param_1.Contains("Play") && ModuleManager.Instance.GetModule("SilentWalk").Enabled)
+            {
+                return false;
+            }
+            
+            //Console.Instance.Log($"UdonSyncRunProgramAsRPC({param_1}, {param_2.prop_VRCPlayerApi_0.displayName}) was called.", LogLevel.Debug);
+            
+            return true;
         }
     }
 }

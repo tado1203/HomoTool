@@ -48,6 +48,10 @@ namespace HomoTool
                 new PlayerList(),
                 new NoMovementPacket(),
                 new ToNFucker(),
+                new Checkpoint(),
+                new BarrierDisabler(),
+                new SilentWalk(),
+                new PlayerCounter(),
             };
 
             foreach (var module in modules)

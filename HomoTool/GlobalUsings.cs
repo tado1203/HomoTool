@@ -3,3 +3,4 @@ global using GamePlayer = MonoBehaviourPublicAPOb_vOb_l_pBoOb_UBoUnique;
 global using GameVRCPlayer = MonoBehaviour1PublicOb_pOb_s_pBoGaOb_pStUnique;
 global using GamePlayerNet = MonoBehaviour1PublicOb_vInByInBoObBySiObUnique;
 global using GameUdonSync = MonoBehaviour1PrivateBoUdOb1DiObBo2InObUnique;
+global using GameRoomManager = MonoBehaviourPublicBoApSiApBoObStApBo1Unique;

@@ -37,9 +37,12 @@ namespace HomoTool.Module.Modules
                 string pingText = $"<color={pingColor.ToHex()}>[{ping} ms]</color>";
 
                 string masterText = player.isMaster ? "<color=yellow>Master</color> - " : "";
-                string displayName = player.displayName;
 
-                string playerInfo = $"{masterText}{fpsText} - {pingText} - {player.displayName}";
+                string displayName = player.displayName;
+                Color playerColor = player.GetPlayer().prop_APIUser_0.GetPlayerColor();
+                string nameText = $"<color={playerColor.ToHex()}>{displayName}</color>";
+
+                string playerInfo = $"{masterText}{fpsText} - {pingText} - {nameText}";
 
                 GUILayout.Label(playerInfo, GUILayout.Height(0));
             }

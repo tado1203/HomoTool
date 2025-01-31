@@ -1,4 +1,5 @@
-﻿using HomoTool.Helpers;
+﻿using HomoTool.Extensions;
+using HomoTool.Helpers;
 using Il2CppInterop.Runtime;
 using System;
 using System.Collections;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
+using VRC.Core;
 using VRC.SDKBase;
 
 namespace HomoTool.Module.Modules
@@ -16,37 +18,63 @@ namespace HomoTool.Module.Modules
 	{
 		private List<GameObject> navMeshAgentGameObjects = new List<GameObject>();
 		private List<GameObject> pickups = new List<GameObject>();
+		private List<GameObject> fileFolders = new List<GameObject>();
+		private List<GameObject> generators = new List<GameObject>();
 
 		private bool renderNavMeshAgent = true;
-		private float maxRenderDistance = 200f;
+		private bool renderPickup = false;
+		private bool renderFileFolders = false;
+		private bool renderGenerator = false;
+		private float maxRenderDistance = 400f;
 
 		public ESP() : base("ESP", false, true, KeyCode.F1) { }
 
 		public override void OnGUI()
 		{
 			if (Networking.LocalPlayer == null || !Enabled)
-				return;			
+				return;
 
 			Vector3 localPlayerPosition = Networking.LocalPlayer.gameObject.transform.position;
 
-			foreach (var gameObject in pickups)
+			RenderObjects(pickups, renderPickup, Color.blue, localPlayerPosition);
+			RenderPlayers(localPlayerPosition);
+			RenderObjects(navMeshAgentGameObjects, renderNavMeshAgent, Color.red, localPlayerPosition);
+			RenderObjects(fileFolders, renderFileFolders, new Color(0f, 163f / 255f, 175f / 255f), localPlayerPosition);
+			RenderObjects(generators, renderGenerator, new Color(1f, 165f / 255f, 0f), localPlayerPosition);
+		}
+
+		private void RenderObjects(List<GameObject> gameObjects, bool renderFlag, Color color, Vector3 localPlayerPosition)
+		{
+			if (!renderFlag)
+				return;
+
+			foreach (var gameObject in gameObjects)
 			{
+				if (!gameObject.activeSelf)
+					continue;
+
 				float distance = Vector3.Distance(localPlayerPosition, gameObject.transform.position);
 				if (distance > maxRenderDistance)
 					continue;
 
-				Vector3 originPos = gameObject.transform.position;
-				Vector3 upperPos = new Vector3(originPos.x, originPos.y + 1f, originPos.z);
-
-				Vector3 screenFootPos = Camera.main.WorldToScreenPoint(originPos);
-				Vector3 screenHeadPos = Camera.main.WorldToScreenPoint(upperPos);
-
-				if (screenFootPos.z > 0f)
-					RenderBoxESP(screenFootPos, screenHeadPos, Color.blue);
-				else
-					RenderOffscreenIndicator(gameObject.transform.position, Color.blue);
+				RenderGameObject(gameObject, color);
 			}
+		}
 
+		private void RenderGameObject(GameObject gameObject, Color color)
+		{
+			Vector3 originPos = gameObject.transform.position;
+			Vector3 upperPos = new Vector3(originPos.x, originPos.y + 1f, originPos.z);
+
+			Vector3 screenFootPos = Camera.main.WorldToScreenPoint(originPos);
+			Vector3 screenHeadPos = Camera.main.WorldToScreenPoint(upperPos);
+
+			if (screenFootPos.z > 0f)
+				RenderBoxESP(screenFootPos, screenHeadPos, color);
+		}
+
+		private void RenderPlayers(Vector3 localPlayerPosition)
+		{
 			foreach (var player in VRCPlayerApi.AllPlayers)
 			{
 				if (player.isLocal)
@@ -56,69 +84,48 @@ namespace HomoTool.Module.Modules
 				if (distance > maxRenderDistance)
 					continue;
 
-				Vector3 footPos = player.gameObject.transform.position;
-				Vector3 headPos = new Vector3(footPos.x, footPos.y + player.GetAvatarEyeHeightAsMeters(), footPos.z);
-
-				Vector3 screenFootPos = Camera.main.WorldToScreenPoint(footPos);
-				Vector3 screenHeadPos = Camera.main.WorldToScreenPoint(headPos);
-
-				if (screenFootPos.z > 0f)
-				{
-					RenderBoxESP(screenFootPos, screenHeadPos, Color.white);
-
-					string playerName = player.displayName;
-					Vector2 textSize = RenderHelper.GetTextSize(playerName, 12);
-
-					float textX = screenHeadPos.x - (textSize.x / 2f);
-					float textY = (float)Screen.height - screenHeadPos.y - textSize.y;
-
-					RenderHelper.RenderText(new Vector2(textX, textY), playerName, 12, Color.white, true);
-				}
-				else
-				{
-					RenderOffscreenIndicator(player.gameObject.transform.position, Color.white);
-				}
+				RenderPlayer(player);
 			}
+		}
 
-			if (renderNavMeshAgent)
+		private void RenderPlayer(VRCPlayerApi player)
+		{
+			Vector3 footPos = player.gameObject.transform.position;
+			Vector3 headPos = new Vector3(footPos.x, footPos.y + player.GetAvatarEyeHeightAsMeters(), footPos.z);
+
+			Vector3 screenFootPos = Camera.main.WorldToScreenPoint(footPos);
+			Vector3 screenHeadPos = Camera.main.WorldToScreenPoint(headPos);
+
+			if (screenFootPos.z > 0f)
 			{
-				foreach (var gameObject in navMeshAgentGameObjects)
-				{
-					if (!gameObject.activeSelf)
-						continue;
+				RenderBoxESP(screenFootPos, screenHeadPos, player.GetPlayer().prop_APIUser_0.GetPlayerColor());
 
-					float distance = Vector3.Distance(localPlayerPosition, gameObject.transform.position);
-					if (distance > maxRenderDistance)
-						continue;
+				string playerName = player.displayName;
+				Vector2 textSize = RenderHelper.GetTextSize(playerName, 12);
 
-					Vector3 footPos = gameObject.transform.position;
-					Vector3 headPos = new Vector3(footPos.x, footPos.y + 2f, footPos.z);
+				float textX = screenHeadPos.x - (textSize.x / 2f);
+				float textY = (float)Screen.height - screenHeadPos.y - textSize.y;
 
-					Vector3 screenFootPos = Camera.main.WorldToScreenPoint(footPos);
-					Vector3 screenHeadPos = Camera.main.WorldToScreenPoint(headPos);
-
-					if (screenFootPos.z > 0f)
-						RenderBoxESP(screenFootPos, screenHeadPos, Color.red);
-					else
-						RenderOffscreenIndicator(gameObject.transform.position, Color.red);
-				}
+				RenderHelper.RenderText(new Vector2(textX, textY), playerName, 12, Color.white, true);
 			}
 		}
 
 		public override void OnMenu()
 		{
 			renderNavMeshAgent = GUILayout.Toggle(renderNavMeshAgent, "NavMeshAgent");
+			renderPickup = GUILayout.Toggle(renderPickup, "Pickup");
+			renderFileFolders = GUILayout.Toggle(renderFileFolders, "FileFolders");
+			renderGenerator = GUILayout.Toggle(renderGenerator, "Generators");
 			GUILayout.Label($"Max Render Distance: {maxRenderDistance:F1}m");
 			maxRenderDistance = GUILayout.HorizontalSlider(maxRenderDistance, 10f, 500f);
 		}
 
 		public override void OnEnable()
 		{
-			if (Networking.LocalPlayer == null || !renderNavMeshAgent)
+			if (Networking.LocalPlayer == null)
 				return;
 
-			navMeshAgentGameObjects.Clear();
-			pickups.Clear();
+			ClearLists();
 
 			foreach (var monster in Resources.FindObjectsOfTypeAll<NavMeshAgent>())
 			{
@@ -128,6 +135,11 @@ namespace HomoTool.Module.Modules
 			{
 				pickups.Add(pickup.gameObject);
 			}
+
+			if (renderFileFolders)
+			{
+				AddFileFolderAndGenerators();
+			}
 		}
 
 		public override void OnDisable()
@@ -135,8 +147,30 @@ namespace HomoTool.Module.Modules
 			if (Networking.LocalPlayer == null)
 				return;
 
+			ClearLists();
+		}
+
+		private void ClearLists()
+		{
 			navMeshAgentGameObjects.Clear();
 			pickups.Clear();
+			fileFolders.Clear();
+			generators.Clear();
+		}
+
+		private void AddFileFolderAndGenerators()
+		{
+			foreach (var obj in GameObject.FindObjectsOfType<GameObject>())
+			{
+				if (obj.name.Contains("SC_File"))
+				{
+					fileFolders.Add(obj);
+				}
+				if (obj.name.Contains("SC_generator"))
+				{
+					generators.Add(obj);
+				}
+			}
 		}
 
 		private void RenderBoxESP(Vector3 footPos, Vector3 headPos, Color color)

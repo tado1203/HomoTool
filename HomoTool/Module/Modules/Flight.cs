@@ -12,6 +12,8 @@ namespace HomoTool.Module.Modules
     public class Flight : ModuleBase
     {
         private float speed = 8.0f;
+        private bool noMovementPacket = true;
+        private bool checkpoint = false;
 
         public Flight() : base("Flight", false, true, KeyCode.F) { }
 
@@ -46,13 +48,18 @@ namespace HomoTool.Module.Modules
 
         public override void OnMenu()
         {
+            noMovementPacket = GUILayout.Toggle(noMovementPacket, "NoMovementPacket");
+            checkpoint = GUILayout.Toggle(checkpoint, "Checkpoint");
             GUILayout.Label($"Speed: {speed}");
             speed = GUILayout.HorizontalSlider(speed, 0f, 50f);
         }
 
         public override void OnEnable()
         {
-            ModuleManager.Instance.GetModule("NoMovementPacket").Enable();
+            if (noMovementPacket)
+                ModuleManager.Instance.GetModule("NoMovementPacket").Enable();
+            if (checkpoint)
+                ModuleManager.Instance.GetModule("Checkpoint").Enable();
             VRCPlayerApi localPlayer = Networking.LocalPlayer;
             if (localPlayer != null)
                 localPlayer.gameObject.GetComponent<CharacterController>().enabled = false;
@@ -60,7 +67,9 @@ namespace HomoTool.Module.Modules
 
         public override void OnDisable()
         {
-            ModuleManager.Instance.GetModule("NoMovementPacket").Disable();
+            if (noMovementPacket)
+                ModuleManager.Instance.GetModule("NoMovementPacket").Disable();
+            ModuleManager.Instance.GetModule("Checkpoint").Disable();
             VRCPlayerApi localPlayer = Networking.LocalPlayer;
             if (localPlayer != null)
                 localPlayer.gameObject.GetComponent<CharacterController>().enabled = true;
