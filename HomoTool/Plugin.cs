@@ -52,6 +52,8 @@ namespace HomoTool
                 new BarrierDisabler(),
                 new SilentWalk(),
                 new PlayerCounter(),
+                new SlashCoFucker(),
+                new FullBright(),
             };
 
             foreach (var module in modules)
