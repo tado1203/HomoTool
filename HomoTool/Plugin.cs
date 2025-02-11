@@ -48,12 +48,11 @@ namespace HomoTool
                 new PlayerList(),
                 new NoMovementPacket(),
                 new ToNFucker(),
-                new Checkpoint(),
-                new BarrierDisabler(),
                 new SilentWalk(),
                 new PlayerCounter(),
-                new SlashCoFucker(),
                 new FullBright(),
+                new MovementFucker(),
+                new Checkpoint(),
             };
 
             foreach (var module in modules)
@@ -72,6 +71,7 @@ namespace HomoTool
             harmony.PatchAll(typeof(Patches.OnPlayerLeft));
             harmony.PatchAll(typeof(Patches.UdonSync.UdonSyncRunProgramAsRPC));
             harmony.PatchAll(typeof(Patches.UdonBehaviour.RunProgram));
+            harmony.PatchAll(typeof(Patches.VRC_EventHandler.TriggerEvent));
         }
     }
 
@@ -83,6 +83,11 @@ namespace HomoTool
         {
             ModuleManager.Instance.OnUpdate();
             NotificationManager.Instance.OnUpdate();
+        }
+
+        private void FixedUpdate()
+        {
+            ModuleManager.Instance.OnFixedUpdate();
         }
 
         private void OnGUI()

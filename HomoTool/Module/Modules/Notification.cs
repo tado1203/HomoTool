@@ -13,17 +13,17 @@ namespace HomoTool.Module.Modules
     {
         public Notification() : base("Notification", true, false) { }
 
-        public override void OnPlayerJoined(GamePlayer player)
+        public override void OnPlayerJoined(Player_Internal player)
         {
             Log(player, true);
         }
 
-        public override void OnPlayerLeft(GamePlayer player)
+        public override void OnPlayerLeft(Player_Internal player)
         {
             Log(player, false);
         }
 
-        private void Log(GamePlayer player, bool joined)
+        private void Log(Player_Internal player, bool joined)
         {
             VRCPlayerApi playerApi = player.prop_VRCPlayerApi_0;
             string playerName = playerApi.isLocal ? "You" : playerApi.displayName;

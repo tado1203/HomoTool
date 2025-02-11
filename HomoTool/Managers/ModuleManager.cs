@@ -48,19 +48,27 @@ namespace HomoTool.Managers
             }
         }
 
+        public void OnFixedUpdate()
+        {
+            foreach (var module in _modules)
+            {
+                module.OnFixedUpdate();
+            }
+        }
+
         public void OnGUI()
         {
             foreach (var module in _modules)
                 module.OnGUI();
         }
 
-        public void OnPlayerJoined(GamePlayer player)
+        public void OnPlayerJoined(Player_Internal player)
         {
             foreach (var module in _modules)
                 module.OnPlayerJoined(player);
         }
 
-        public void OnPlayerLeft(GamePlayer player)
+        public void OnPlayerLeft(Player_Internal player)
         {
             foreach (var module in _modules)
                 module.OnPlayerLeft(player);

@@ -11,7 +11,7 @@ namespace HomoTool.Patches
     [HarmonyPatch(typeof(MonoBehaviourPublicDaBoAc1ObDiOb2InHaUnique), nameof(MonoBehaviourPublicDaBoAc1ObDiOb2InHaUnique.OnPlayerLeft))]
     class OnPlayerLeft
     {
-        static void Postfix(GamePlayer param_1)
+        static void Postfix(Player_Internal param_1)
         {
             ModuleManager.Instance.OnPlayerLeft(param_1);
         }

@@ -26,7 +26,7 @@ namespace HomoTool.Module.Modules
 
             foreach (var player in VRCPlayerApi.AllPlayers)
             {
-                GamePlayerNet playerNet = player.GetPlayer()._playerNet;
+                PlayerNet_Internal playerNet = player.GetPlayer()._playerNet;
                 int fps = playerNet.GetFramerate();
                 int ping = playerNet.GetPing();
 

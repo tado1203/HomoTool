@@ -18,42 +18,14 @@ namespace HomoTool.Module.Modules
             if (Networking.LocalPlayer == null)
                 return;
 
-            List<GameObject> generators = new List<GameObject>();
-            List<VRC_Pickup> fuels = new List<VRC_Pickup>();
-            List<VRC_Pickup> batteries = new List<VRC_Pickup>();
-
-            foreach (var obj in GameObject.FindObjectsOfType<GameObject>())
-			{
-				if (obj.name.Contains("SC_generator"))
-				{
-					generators.Add(obj);
-				}
-			}
-
             foreach (var pickup in GameObject.FindObjectsOfType<VRC_Pickup>())
             {
-                if (pickup.InteractionText == "ガソリン缶")
-                    fuels.Add(pickup);
-                
-                if (pickup.InteractionText == "バッテリー")
-                    batteries.Add(pickup);
-            }
-
-            int generatorCount = generators.Count;
-            int fuelCount = fuels.Count;
-            int batteryCount = batteries.Count;
-
-            for (int i = 0; i < generatorCount; i++)
-            {
-                int fuelToAssign = Mathf.Min(4, fuelCount - i * 4);
-                for (int j = 0; j < fuelToAssign; j++)
+                if (pickup.InteractionText == "ガソリン缶" || pickup.InteractionText == "バッテリー")
                 {
-                    fuels[i * 4 + j].transform.position = generators[i].transform.position + new Vector3(0, 2f, 0);
-                }
+                    if (Networking.GetOwner(pickup.gameObject) != Networking.LocalPlayer)
+                        Networking.SetOwner(Networking.LocalPlayer, pickup.gameObject);
 
-                if (i < batteryCount)
-                {
-                    batteries[i].transform.position = generators[i].transform.position  + new Vector3(0, 2f, 0);
+                    pickup.gameObject.transform.position = Networking.LocalPlayer.gameObject.transform.position + new Vector3(0, 1f, 0);
                 }
             }
         }

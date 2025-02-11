@@ -9,7 +9,7 @@ namespace HomoTool.Extensions
 {
     public static class PlayerNetExtensions
     {
-        public static int GetFramerate(this GamePlayerNet playerNet)
+        public static int GetFramerate(this PlayerNet_Internal playerNet)
         {
             if (playerNet == null)
                 return 0;
@@ -18,7 +18,7 @@ namespace HomoTool.Extensions
             return (int)Mathf.Floor(1000f / playerNet.field_Private_Byte_0);
         }
 
-        public static int GetPing(this GamePlayerNet playerNet)
+        public static int GetPing(this PlayerNet_Internal playerNet)
         {
             if (playerNet == null)
                 return 0;

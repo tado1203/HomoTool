@@ -12,7 +12,7 @@ namespace HomoTool.Patches
     [HarmonyPatch(typeof(MonoBehaviourPublicDaBoAc1ObDiOb2InHaUnique), nameof(MonoBehaviourPublicDaBoAc1ObDiOb2InHaUnique.OnPlayerJoined))]
     class OnPlayerJoined
     {
-        static void Postfix(GamePlayer param_1)
+        static void Postfix(Player_Internal param_1)
         {
             ModuleManager.Instance.OnPlayerJoined(param_1);
         }

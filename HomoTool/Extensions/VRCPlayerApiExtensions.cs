@@ -9,9 +9,9 @@ namespace HomoTool.Extensions
 {
     public static class VRCPlayerApiExtensions
     {
-        public static GamePlayer GetPlayer(this VRCPlayerApi playerApi)
+        public static Player_Internal GetPlayer(this VRCPlayerApi playerApi)
         {
-            return playerApi.gameObject.GetComponent<GamePlayer>();
+            return playerApi.gameObject.GetComponent<Player_Internal>();
         }
     }
 }

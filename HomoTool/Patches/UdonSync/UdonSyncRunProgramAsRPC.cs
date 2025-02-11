@@ -10,10 +10,10 @@ using VRC.SDKBase;
 
 namespace HomoTool.Patches.UdonSync
 {
-    [HarmonyPatch(typeof(GameUdonSync), nameof(GameUdonSync.UdonSyncRunProgramAsRPC))]
+    [HarmonyPatch(typeof(UdonSync_Internal), nameof(UdonSync_Internal.UdonSyncRunProgramAsRPC))]
     class UdonSyncRunProgramAsRPC
     {
-        static bool Prefix(string param_1, GamePlayer param_2)
+        static bool Prefix(string param_1, Player_Internal param_2)
         {
             if (param_2.prop_VRCPlayerApi_0.displayName == Networking.LocalPlayer.displayName && param_1.Contains("Play") && ModuleManager.Instance.GetModule("SilentWalk").Enabled)
             {
@@ -21,7 +21,8 @@ namespace HomoTool.Patches.UdonSync
             }
             
             //Console.Instance.Log($"UdonSyncRunProgramAsRPC({param_1}, {param_2.prop_VRCPlayerApi_0.displayName}) was called.", LogLevel.Debug);
-            
+            //Plugin.Log.LogMessage($"UdonSyncRunProgramAsRPC({param_1}, {param_2.prop_VRCPlayerApi_0.displayName}) was called.");
+
             return true;
         }
     }

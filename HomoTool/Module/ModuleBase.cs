@@ -26,9 +26,10 @@ namespace HomoTool.Module
         }
 
         public virtual void OnUpdate() { }
+        public virtual void OnFixedUpdate() { }
         public virtual void OnGUI() { }
-        public virtual void OnPlayerJoined(GamePlayer player) { }
-        public virtual void OnPlayerLeft(GamePlayer player) { }
+        public virtual void OnPlayerJoined(Player_Internal player) { }
+        public virtual void OnPlayerLeft(Player_Internal player) { }
         public virtual void OnMenu() { }
         public virtual void OnEnable() { }
         public virtual void OnDisable() { }

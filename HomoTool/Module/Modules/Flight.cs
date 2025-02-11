@@ -60,19 +60,16 @@ namespace HomoTool.Module.Modules
                 ModuleManager.Instance.GetModule("NoMovementPacket").Enable();
             if (checkpoint)
                 ModuleManager.Instance.GetModule("Checkpoint").Enable();
-            VRCPlayerApi localPlayer = Networking.LocalPlayer;
-            if (localPlayer != null)
-                localPlayer.gameObject.GetComponent<CharacterController>().enabled = false;
+            if (Networking.LocalPlayer != null)
+                Networking.LocalPlayer.gameObject.GetComponent<CharacterController>().enabled = false;
         }
 
         public override void OnDisable()
         {
-            if (noMovementPacket)
-                ModuleManager.Instance.GetModule("NoMovementPacket").Disable();
+            ModuleManager.Instance.GetModule("NoMovementPacket").Disable();
             ModuleManager.Instance.GetModule("Checkpoint").Disable();
-            VRCPlayerApi localPlayer = Networking.LocalPlayer;
-            if (localPlayer != null)
-                localPlayer.gameObject.GetComponent<CharacterController>().enabled = true;
+            if (Networking.LocalPlayer != null)
+               Networking.LocalPlayer.gameObject.GetComponent<CharacterController>().enabled = true;
         }
     }
 }
